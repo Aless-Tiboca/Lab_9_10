@@ -5,9 +5,9 @@
 #include <cassert>
 #include "tests.h"
 #include "../Domain/Ticket/Ticket.h"
-#include "../Repository/RepoInMemory.h"
-#include "../Repository/RepoInFile.h"
 #include "../Service/TicketService.h"
+#include "../Repository/RepoInFile.h"
+#include "../Repository/RepoInMemory.h"
 
 void testAll() {
     testTicket();
