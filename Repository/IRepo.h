@@ -7,20 +7,21 @@
 
 #include <iostream>
 #include <vector>
-#include "../Domain/Ticket.h"
+#include "../Domain/Ticket/Ticket.h"
 
 using namespace std;
 
+template <class T>
 class IRepo{
 public:
 
-    virtual void create(Ticket) = 0;
+    virtual void create(T) = 0;
 
-    virtual vector<Ticket> getAll() = 0;
+    virtual vector<T> getAll() = 0;
 
-    virtual void update(string, Ticket) = 0;
+    virtual void update(unsigned int, T) = 0;
 
-    virtual void deleteTicket(string) = 0;
+    virtual void deleteEntity(unsigned int) = 0;
 };
 
 #endif //LAB_9_10_IREPO_H

@@ -16,15 +16,16 @@
 
 using namespace std;
 
-class RepoInFile: public RepoInMemory {
+template <class T>
+class RepoInFile: public RepoInMemory<T> {
 private:
     string fileName;
 public:
     explicit RepoInFile(string fileName);
-    void create(Ticket p) override;
-    void deleteTicket(string id) override;
-    void update(string id, Ticket p) override;
-    vector<Ticket> getAll() override;
+    void create(T p) override;
+    void deleteEntity(unsigned int id) override;
+    void update(unsigned int id, T p) override;
+    vector<T> getAll() override;
     void loadFromFile();
     void saveToFile();
     void clearFile();

@@ -7,18 +7,22 @@
 
 #include "../Repository/IRepo.h"
 #include "../Repository/RepoInMemory.h"
+#include "../Domain/Ticket/TicketValidator.h"
 
 class TicketService {
 private:
-    IRepo& repo;
+    IRepo<Ticket>& repo;
+    TicketValidator validator;
+
+    bool doesExist(unsigned int id);
 
 public:
-    TicketService(IRepo &repo);
+    TicketService(IRepo<Ticket> &repo);
 
     void create(Ticket ex);
-    void update(string id, Ticket newTicket);
+    void update(unsigned int id, Ticket newTicket);
     vector<Ticket> getAll();
-    vector<Ticket> deleteTicket(string id);
+    vector<Ticket> deleteTicket(unsigned int id);
     int getSumOfTicketsFromADay(string day);
 
 };

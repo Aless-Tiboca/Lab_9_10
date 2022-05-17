@@ -6,13 +6,13 @@
 #define LAB_9_10_REPOINMEMORY_H
 
 #include <bits/stdc++.h>
-#include "../Domain/Ticket.h"
+#include "../Domain/Ticket/Ticket.h"
 #include "IRepo.h"
 #include <vector>
 
-class RepoInMemory: public IRepo{
+template <class T> class RepoInMemory: public IRepo<T>{
 private:
-    vector<Ticket> tickets;
+    vector<T> tickets;
 public:
     /**
      * Constructor
@@ -23,17 +23,17 @@ public:
      * Adauga o entitate in repository
      * @param e entitatea de adaugat
      */
-    void create(Ticket t) override;
+    void create(T t) override;
 
     /**
      * Returneaza toate entitatile intr-un vector
      * @return un vector cu toate entitatile
      */
-    vector<Ticket> getAll() override;
+    vector<T> getAll() override;
 
-    void update(string id, Ticket newTicket) override;
+    void update(unsigned int id, T newEntity) override;
 
-    void deleteTicket(string id) override;
+    void deleteEntity(unsigned int id) override;
 
 };
 

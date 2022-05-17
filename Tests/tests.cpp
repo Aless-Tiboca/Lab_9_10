@@ -4,7 +4,7 @@
 
 #include <cassert>
 #include "tests.h"
-#include "../Domain/Ticket.h"
+#include "../Domain/Ticket/Ticket.h"
 #include "../Repository/RepoInMemory.h"
 #include "../Repository/RepoInFile.h"
 #include "../Service/TicketService.h"
@@ -13,7 +13,7 @@ void testAll() {
     testTicket();
     testRepoInMemory();
     testRepoInFile();
-    testService();
+    testTicketService();
 }
 
 void testTicket() {
@@ -22,32 +22,44 @@ void testTicket() {
 }
 
 void testTicketGet() {
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
+    Ticket ticket(12, "Luni", "CJ-SB", 12);
     assert(ticket.getCod() == "CJ-SB");
-    assert(ticket.getId() == "12");
+    assert(ticket.getId() == 12);
     assert(ticket.getPret() == 12);
     assert(ticket.getZiua() == "Luni");
 }
 
 void testTicketSet() {
-    Ticket ticket("1");
+    Ticket ticket(1);
     ticket.setCod("CJ-SB");
     ticket.setPret(12);
     ticket.setZiua("Luni");
     assert(ticket.getCod() == "CJ-SB");
-    assert(ticket.getId() == "1");
+    assert(ticket.getId() == 1);
     assert(ticket.getPret() == 12);
     assert(ticket.getZiua() == "Luni");
 }
 
 void testRepoInMemoryAdd() {
-    RepoInMemory repoInMemory;
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "cdd", 0);
-    repoInMemory.create(ticket);
-    repoInMemory.create(ticket1);
-    assert(repoInMemory.getAll().size() == 2);
-    assert(repoInMemory.getAll()[0] == ticket);
+    RepoInMemory<Ticket> repository;
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    repository.create(p1);
+    repository.create(p2);
+    repository.create(p3);
+    repository.create(p4);
+    repository.create(p5);
+
+    assert(repository.getAll()[0] == p1);
+    assert(repository.getAll()[1] == p2);
+    assert(repository.getAll()[2] == p3);
+    assert(repository.getAll()[3] == p4);
+    assert(repository.getAll()[4] == p5);
 }
 
 void testRepoInMemory() {
@@ -58,37 +70,65 @@ void testRepoInMemory() {
 }
 
 void testRepoInMemoryGetAll() {
-    RepoInMemory repoInMemory;
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123");
-    repoInMemory.create(ticket);
-    repoInMemory.create(ticket1);
-    assert(repoInMemory.getAll().size() == 2);
-    assert(repoInMemory.getAll()[0] == ticket);
+    RepoInMemory<Ticket> repository;
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    repository.create(p1);
+    repository.create(p2);
+    repository.create(p3);
+    repository.create(p4);
+    repository.create(p5);
+
+    assert(repository.getAll().size() == 5);
 }
 
 void testRepoInMemoryUpdate() {
-    RepoInMemory repoInMemory;
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123");
-    repoInMemory.create(ticket);
-    repoInMemory.create(ticket1);
-    repoInMemory.update("12", Ticket("12", "Marti", "FFF", 10));
-    assert(repoInMemory.getAll()[0].getCod() == "FFF");
-    assert(repoInMemory.getAll()[0].getId() == "12");
-    assert(repoInMemory.getAll()[0].getPret() == 10);
-    assert(repoInMemory.getAll()[0].getZiua() == "Marti");
+    RepoInMemory<Ticket> repository;
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    repository.create(p1);
+    repository.create(p2);
+    repository.create(p3);
+    repository.create(p4);
+    repository.create(p5);
+
+    repository.update(1, Ticket(1, "Marti", "FFF", 10));
+
+    assert(repository.getAll()[0].getCod() == "FFF");
+    assert(repository.getAll()[0].getId() == 1);
+    assert(repository.getAll()[0].getPret() == 10);
+    assert(repository.getAll()[0].getZiua() == "Marti");
 }
 
 void testRepoInMemoryDelete() {
-    RepoInMemory repoInMemory;
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123");
-    repoInMemory.create(ticket);
-    repoInMemory.create(ticket1);
-    assert(repoInMemory.getAll().size() == 2);
-    repoInMemory.deleteTicket("12");
-    assert(repoInMemory.getAll().size() == 1);
+    RepoInMemory<Ticket> repository;
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    repository.create(p1);
+    repository.create(p2);
+    repository.create(p3);
+    repository.create(p4);
+    repository.create(p5);
+
+    repository.deleteEntity(2);
+    repository.deleteEntity(4);
+    repository.deleteEntity(5);
+    assert(repository.getAll().size() == 2);
 }
 
 void testRepoInFile() {
@@ -99,101 +139,185 @@ void testRepoInFile() {
 }
 
 void testRepoInFileAdd() {
-    RepoInFile repoInFile("runTest.txt");
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "ds", 10);
-    repoInFile.create(ticket);
-    repoInFile.create(ticket1);
-    assert(repoInFile.getAll().size() == 2);
-    repoInFile.clearFile();
+    RepoInFile<Ticket> repository("runTest.txt");
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    repository.create(p1);
+    repository.create(p2);
+    repository.create(p3);
+    repository.create(p4);
+    repository.create(p5);
+
+    assert(repository.getAll()[0] == p1);
+    assert(repository.getAll()[1] == p2);
+    assert(repository.getAll()[2] == p3);
+    assert(repository.getAll()[3] == p4);
+    assert(repository.getAll()[4] == p5);
+    repository.clearFile();
 }
 
 void testRepoInFileGetAll() {
-    RepoInFile repoInFile("runTest.txt");
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "ds", 10);
-    repoInFile.create(ticket);
-    repoInFile.create(ticket1);
-    assert(repoInFile.getAll().size() == 2);
-    repoInFile.clearFile();
+    RepoInFile<Ticket> repository("runTest.txt");
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    repository.create(p1);
+    repository.create(p2);
+    repository.create(p3);
+    repository.create(p4);
+    repository.create(p5);
+
+    assert(repository.getAll().size() == 5);
+    repository.clearFile();
 }
 
 void testRepoInFileDelete() {
-    RepoInFile repoInFile("runTest.txt");
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "ds", 10);
-    repoInFile.create(ticket);
-    repoInFile.create(ticket1);
-    repoInFile.deleteTicket("12");
-    assert(repoInFile.getAll().size() == 1);
-    repoInFile.deleteTicket("123");
-    assert(repoInFile.getAll().empty());
+    RepoInFile<Ticket> repository("runTest.txt");
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    repository.create(p1);
+    repository.create(p2);
+    repository.create(p3);
+    repository.create(p4);
+    repository.create(p5);
+
+    repository.deleteEntity(2);
+    repository.deleteEntity(4);
+    repository.deleteEntity(5);
+    assert(repository.getAll().size() == 2);
+    repository.clearFile();
 }
 
 void testRepoInFileUpdate() {
-    RepoInFile repoInFile("runTest.txt");
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "ds", 10);
-    repoInFile.create(ticket);
-    repoInFile.create(ticket1);
-    repoInFile.update("12", Ticket("12", "Marti", "FFF", 10));
-    assert(repoInFile.getAll()[0].getCod() == "FFF");
-    assert(repoInFile.getAll()[0].getId() == "12");
-    assert(repoInFile.getAll()[0].getPret() == 10);
-    assert(repoInFile.getAll()[0].getZiua() == "Marti");
-    repoInFile.clearFile();
+    RepoInFile<Ticket> repository("runTest.txt");
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    repository.create(p1);
+    repository.create(p2);
+    repository.create(p3);
+    repository.create(p4);
+    repository.create(p5);
+
+    repository.update(1, Ticket(1, "Marti", "FFF", 10));
+
+    assert(repository.getAll()[0].getCod() == "FFF");
+    assert(repository.getAll()[0].getId() == 1);
+    assert(repository.getAll()[0].getPret() == 10);
+    assert(repository.getAll()[0].getZiua() == "Marti");
+    repository.clearFile();
 }
 
-void testService() {
-    testServiceAdd();
-    testServiceUpdate();
-    testServiceDelete();
-    testServiceSumFromADay();
+void testTicketService() {
+    testTicketServiceAdd();
+    testTicketServiceUpdate();
+    testTicketServiceDelete();
+    testTicketServiceSumFromADay();
 }
 
-void testServiceAdd() {
-    RepoInMemory repoInMemory;
+void testTicketServiceAdd() {
+    RepoInMemory<Ticket> repoInMemory;
     TicketService ser(repoInMemory);
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "ds", 10);
-    ser.create(ticket);
-    ser.create(ticket1);
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    ser.create(p1);
+    ser.create(p2);
+    ser.create(p3);
+    ser.create(p4);
+    ser.create(p5);
+
+    assert(ser.getAll()[0] == p1);
+    assert(ser.getAll()[1] == p2);
+    assert(ser.getAll()[2] == p3);
+    assert(ser.getAll()[3] == p4);
+    assert(ser.getAll()[4] == p5);
+}
+
+void testTicketServiceSumFromADay() {
+    RepoInMemory<Ticket> repoInMemory;
+    TicketService ser(repoInMemory);
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    ser.create(p1);
+    ser.create(p2);
+    ser.create(p3);
+    ser.create(p4);
+    ser.create(p5);
+
+    assert(ser.getSumOfTicketsFromADay("Luni") == 13);
+}
+
+void testTicketServiceDelete() {
+    RepoInMemory<Ticket> repoInMemory;
+    TicketService ser(repoInMemory);
+
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
+
+    ser.create(p1);
+    ser.create(p2);
+    ser.create(p3);
+    ser.create(p4);
+    ser.create(p5);
+
+    ser.deleteTicket(2);
+    ser.deleteTicket(4);
+    ser.deleteTicket(5);
     assert(ser.getAll().size() == 2);
 }
 
-void testServiceSumFromADay() {
-    RepoInMemory repoInMemory;
+void testTicketServiceUpdate() {
+    RepoInMemory<Ticket> repoInMemory;
     TicketService ser(repoInMemory);
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "ds", 10);
-    ser.create(ticket);
-    ser.create(ticket1);
-    ser.create(Ticket("3", "Luni", "df",10));
-    assert(ser.getSumOfTicketsFromADay("Luni")==22);
-}
 
-void testServiceDelete() {
-    RepoInMemory repoInMemory;
-    TicketService ser(repoInMemory);
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "ds", 10);
-    ser.create(ticket);
-    ser.create(ticket1);
-    ser.deleteTicket("12");
-    assert(ser.getAll().size() == 1);
-    ser.deleteTicket("123");
-}
+    Ticket p1(1, "Luni", "c2", 3);
+    Ticket p2(2, "Marti", "s3", 5);
+    Ticket p3(3, "Luni", "ci4", 7);
+    Ticket p4(4, "Joi", "45d", 4);
+    Ticket p5(5, "Luni","fr4" , 3);
 
-void testServiceUpdate() {
-    RepoInMemory repoInMemory;
-    TicketService ser(repoInMemory);
-    Ticket ticket("12", "Luni", "CJ-SB", 12);
-    Ticket ticket1("123", "Marti", "ds", 10);
-    ser.create(ticket);
-    ser.create(ticket1);
-    ser.update("12", Ticket("12", "Marti", "FFF", 10));
+    ser.create(p1);
+    ser.create(p2);
+    ser.create(p3);
+    ser.create(p4);
+    ser.create(p5);
+
+    ser.update(1, Ticket(1, "Marti", "FFF", 10));
+
     assert(ser.getAll()[0].getCod() == "FFF");
-    assert(ser.getAll()[0].getId() == "12");
+    assert(ser.getAll()[0].getId() == 1);
     assert(ser.getAll()[0].getPret() == 10);
     assert(ser.getAll()[0].getZiua() == "Marti");
 }
+

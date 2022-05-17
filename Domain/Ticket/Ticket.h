@@ -12,26 +12,29 @@ using namespace std;
 
 class Ticket {
 private:
-    string id, ziua, cod;
-    int pret;
+    string ziua, cod;
+    unsigned int id;
+    double pret;
 public:
-    Ticket(const string &id);
+    Ticket(unsigned int id);
 
-    Ticket(const string &id, const string &ziua, const string &cod, int pret);
+    Ticket(const string& line);
 
-    const string &getId() const;
+    Ticket(unsigned int id, const string &ziua, const string &cod, double pret);
+
+    unsigned int getId() const;
 
     const string &getZiua() const;
 
     const string &getCod() const;
 
-    int getPret() const;
+    double getPret() const;
 
     void setZiua(const string &ziua);
 
     void setCod(const string &cod);
 
-    void setPret(int pret);
+    void setPret(double pret);
 
     bool operator==(const Ticket &rhs) const;
 

@@ -4,36 +4,28 @@
 
 #include "RepoInMemory.h"
 
-RepoInMemory::RepoInMemory() {
-    tickets = vector<Ticket>();
+template<class T>
+RepoInMemory<T>::RepoInMemory() = default;
+
+template<class T>
+void RepoInMemory<T>::create(T t) {
+    tickets.push_back(t);
 }
 
-void RepoInMemory::create(Ticket t) {
-    vector<string> myList = {"Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"};
-    bool ok = true;
-    for(auto &i: tickets){
-        if(t.getId() == i.getId())
-            ok = false;
-    }
-    if(find(myList.begin(), myList.end(), t.getZiua()) != myList.end() && ok){
-        tickets.push_back(t);
-        }
-    else if(!ok){
-        cout<<"Id-ul exista deja!"<<endl;
-    }
-}
-
-vector<Ticket> RepoInMemory::getAll() {
+template<class T>
+vector<T> RepoInMemory<T>::getAll() {
     return tickets;
 }
 
-void RepoInMemory::update(string id, Ticket newTicket) {
+template<class T>
+void RepoInMemory<T>::update(unsigned int id, T newEntity) {
     for(auto &i: tickets){
-        if (i.getId() == id) i = newTicket;
+        if (i.getId() == id) i = newEntity;
     }
 }
 
-void RepoInMemory::deleteTicket(string id) {
+template<class T>
+void RepoInMemory<T>::deleteEntity(unsigned int id) {
     for(auto i: tickets) {
         if (i.getId() == id){
             tickets.erase(find(tickets.begin(), tickets.end(), i));

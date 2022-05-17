@@ -6,11 +6,14 @@
 
 int main() {
     testAll();
-    RepoInMemory repoInMemory;
-    RepoInFile repoInFile("test.txt");
-    IRepo& iRepo = repoInMemory;
-    TicketService ser(iRepo);
-    Console con(ser);
-    con.runMenu();
+    RepoInMemory<Ticket> repoInMemory;
+    RepoInFile<Ticket> repoInFile1("ticket.txt");
+    RepoInFile<Banknote> repoInFile2("banknotes.txt");
+    IRepo<Ticket>& iRepo1 = repoInFile1;
+    IRepo<Banknote>& iRepo2 = repoInFile2;
+    TicketService serT(iRepo1);
+    BanknoteService serB(iRepo2);
+    Console console(serT, serB);
+    console.runMenu();
     return 0;
 }

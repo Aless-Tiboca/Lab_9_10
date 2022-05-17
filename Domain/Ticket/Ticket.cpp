@@ -2,15 +2,35 @@
 // Created by alext on 21/04/2022.
 //
 
+#include <sstream>
+#include <string>
+#include <vector>
 #include "Ticket.h"
 
-Ticket::Ticket(const string &id) : id(id) {
+Ticket::Ticket(unsigned int id) : id(id) {
     this->pret = 0;
     this->ziua = "Luni";
 }
 
-Ticket::Ticket(const string &id, const string &ziua, const string &cod, int pret) : id(id), ziua(ziua), cod(cod),
+Ticket::Ticket(unsigned int id, const string &ziua, const string &cod, double pret) : id(id), ziua(ziua), cod(cod),
                                                                                     pret(pret) {}
+
+Ticket::Ticket(const string& line) {
+    vector<string> aux;
+    stringstream ss(line);
+    string word;
+    while (ss >> word) {
+        aux.push_back(word);
+    }
+    this->id = stoi(aux[1]);
+    this->pret = stod(aux[7]);
+    this->cod = aux[5];
+    this->ziua = aux[3];
+}
+
+unsigned int Ticket::getId() const {
+    return id;
+}
 
 const string &Ticket::getZiua() const {
     return ziua;
@@ -20,7 +40,7 @@ const string &Ticket::getCod() const {
     return cod;
 }
 
-int Ticket::getPret() const {
+double Ticket::getPret() const {
     return pret;
 }
 
@@ -32,7 +52,7 @@ void Ticket::setCod(const string &cod) {
     Ticket::cod = cod;
 }
 
-void Ticket::setPret(int pret) {
+void Ticket::setPret(double pret) {
     Ticket::pret = pret;
 }
 
@@ -44,20 +64,16 @@ bool Ticket::operator!=(const Ticket &rhs) const {
     return !(rhs == *this);
 }
 
-
-
 ostream &operator<<(ostream &os, const Ticket &ticket) {
     os << "id: " << ticket.id << " ziua: " << ticket.ziua << " cod: " << ticket.cod << " pret: " << ticket.pret <<endl;
     return os;
 }
 
-const string &Ticket::getId() const {
-    return id;
-}
 
 Ticket &Ticket::operator=(const Ticket &rhs) {
-    this->id = rhs.id;
     this->pret = rhs.pret;
     this->cod = rhs.cod;
     this->ziua = rhs.ziua;
+    return *this;
 }
+

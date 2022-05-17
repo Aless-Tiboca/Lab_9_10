@@ -4,40 +4,26 @@
 
 #include "RepoInFile.h"
 
-RepoInFile::RepoInFile(string filename) {
+template <class T>
+RepoInFile<T>::RepoInFile(string filename) {
     this->fileName = filename;
     this->loadFromFile();
 }
 
-void RepoInFile::loadFromFile() {
+template <class T>
+void RepoInFile<T>::loadFromFile() {
     if(!this->fileName.empty()) {
+        string line;
         ifstream f(this->fileName);
-        string Sid;
-        string id;
-        string code;
-        string zi;
-        int price;
-        while (!f.eof())
-        {
-
-            f>>Sid>>id;
-            f>>Sid>>zi;
-            f>>Sid>>code;
-            f>>Sid>>price;
-            bool ok = false;
-            for (const auto& a: this->getAll())
-                if (a.getId() == id) { ok = true; }
-            if(!ok) {
-                Ticket p(id, zi, code, price);
-                this->create(p);
-            }
-
+        while (getline(f, line)) {
+            T object(line);
+            RepoInMemory<T>::create(object);
         }
-        f.close();
     }
 }
 
-void RepoInFile::saveToFile() {
+template <class T>
+void RepoInFile<T>::saveToFile() {
 
     if (!this->fileName.empty())
     {
@@ -50,26 +36,31 @@ void RepoInFile::saveToFile() {
     }
 }
 
-void RepoInFile::create(Ticket p) {
-    RepoInMemory::create(p);
+template <class T>
+void RepoInFile<T>::create(T p) {
+    RepoInMemory<T>::create(p);
     saveToFile();
 }
 
-void RepoInFile::deleteTicket(string id){
-    RepoInMemory::deleteTicket(id);
+template <class T>
+void RepoInFile<T>::deleteEntity(unsigned int id){
+    RepoInMemory<T>::deleteEntity(id);
     saveToFile();
 }
 
-void RepoInFile::update(string id, Ticket p) {
-    RepoInMemory::update(id, p);
+template <class T>
+void RepoInFile<T>::update(unsigned int id, T p) {
+    RepoInMemory<T>::update(id, p);
     saveToFile();
 }
 
-vector<Ticket> RepoInFile::getAll() {
-    return RepoInMemory::getAll();
+template <class T>
+vector<T> RepoInFile<T>::getAll() {
+    return RepoInMemory<T>::getAll();
 }
 
-void RepoInFile::clearFile() {
+template <class T>
+void RepoInFile<T>::clearFile() {
     ofstream f(this->fileName);
     f<<"";
 }

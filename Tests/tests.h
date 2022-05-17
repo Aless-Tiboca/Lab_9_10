@@ -19,10 +19,10 @@ void testRepoInFileAdd();
 void testRepoInFileGetAll();
 void testRepoInFileUpdate();
 void testRepoInFileDelete();
-void testService();
-void testServiceAdd();
-void testServiceUpdate();
-void testServiceDelete();
-void testServiceSumFromADay();
+void testTicketService();
+void testTicketServiceAdd();
+void testTicketServiceUpdate();
+void testTicketServiceDelete();
+void testTicketServiceSumFromADay();
 
 #endif //LAB_9_10_TESTS_H

@@ -7,20 +7,46 @@
 
 #include <iostream>
 #include "../Service/TicketService.h"
+#include "../Service/BanknoteService.h"
 
 using namespace std;
 
 class Console {
 private:
-    TicketService service;
-    int banknotesTypes[5] = {1, 5, 10, 50, 100};
-    map<int, int> myBanknotes;
+    TicketService ticketService;
+    BanknoteService banknoteService;
 public:
-    Console(const TicketService &service);
+    Console(const TicketService &ticketService, const BanknoteService &banknoteService);
+
     void runTicketMenu();
     void runBanknoteMenu();
     void runAdmin();
     void runMenu();
+    void runClient();
+
+    void getAll();
+
+    void sumOfTicketFromADay();
+
+    void purchaseATicket();
+
+    void showBanknotes();
+
+    void addBanknotes();
+
+    void modifyTickets();
+
+    void deleteTicket();
+
+    void addTickets();
+
+    void pickUpChange(double &inserted, Ticket &ticket, vector<Banknote> copy);
+
+    void insertMoney(double &inserted, double credit, Ticket &ticket);
+
+    void updateBanknotes();
+
+    void deleteBanknotes();
 };
 
 
