@@ -14,26 +14,29 @@ template <class T> class RepoInMemory: public IRepo<T>{
 private:
     vector<T> entities;
 public:
-    /**
-     * Constructor
-     */
-    RepoInMemory();
+    RepoInMemory() = default;
 
-    /**
-     * Adauga o entitate in repository
-     * @param e entitatea de adaugat
-     */
-    void create(T t) override;
+    void create(T t) {
+        entities.push_back(t);
+    }
 
-    /**
-     * Returneaza toate entitatile intr-un vector
-     * @return un vector cu toate entitatile
-     */
-    vector<T> getAll() override;
+    vector<T> getAll() {
+        return entities;
+    }
 
-    void update(unsigned int id, T newEntity) override;
+    void update(unsigned int id, T newEntity) {
+        for(auto &i: entities){
+            if (i.getId() == id) i = newEntity;
+        }
+    }
 
-    void deleteEntity(unsigned int id) override;
+    void deleteEntity(unsigned int id) {
+        for(int i = 0; i < entities.size(); i++) {
+            if(entities[i].getId() == id) {
+                entities.erase(entities.begin() + i);
+            }
+        }
+    }
 
 };
 

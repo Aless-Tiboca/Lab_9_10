@@ -13,16 +13,16 @@ using namespace std;
 class Ticket {
 private:
     string ziua, cod;
-    unsigned int id;
+    int id;
     double pret;
 public:
-    Ticket(unsigned int id);
+    Ticket(int id);
 
     Ticket(const string& line);
 
-    Ticket(unsigned int id, const string &ziua, const string &cod, double pret);
+    Ticket(int id, const string &ziua, const string &cod, double pret);
 
-    unsigned int getId() const;
+    int getId() const;
 
     const string &getZiua() const;
 

@@ -11,7 +11,7 @@
 
 TicketService::TicketService(IRepo<Ticket> &repo) : repo(repo) {}
 
-bool TicketService::doesExist(unsigned int id) {
+bool TicketService::doesExist(int id) {
     for(auto &item: repo.getAll()){
         if(item.getId() == id)
             return true;
@@ -27,7 +27,7 @@ void TicketService::create(Ticket ex) {
     this->repo.create(ex);
 }
 
-void TicketService::update(unsigned int id, Ticket newTicket) {
+void TicketService::update(int id, Ticket newTicket) {
     if(!doesExist(id)) {
         throw Exception("Nu exista un obiect cu ID-ul dat!");
     }
@@ -36,10 +36,13 @@ void TicketService::update(unsigned int id, Ticket newTicket) {
 }
 
 vector<Ticket> TicketService::getAll() {
+    if(repo.getAll().size() == 0) {
+        throw Exception("Nu sunt bilete disponibile!.");
+    }
     return this->repo.getAll();
 }
 
-vector<Ticket> TicketService::deleteTicket(unsigned int id) {
+vector<Ticket> TicketService::deleteTicket(int id) {
     if(!doesExist(id)) {
         throw Exception("Nu exista un obiect cu ID-ul dat!");
     }
@@ -55,4 +58,13 @@ int TicketService::getSumOfTicketsFromADay(string day) {
         }
     }
     return sum;
+}
+
+Ticket TicketService::getById(int id) {
+    for (auto &item: repo.getAll()) {
+        if (item.getId() == id) {
+            return item;
+        }
+    }
+    throw Exception("Nu exista un bilet cu ID-ul dat!");
 }

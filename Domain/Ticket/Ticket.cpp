@@ -7,12 +7,12 @@
 #include <vector>
 #include "Ticket.h"
 
-Ticket::Ticket(unsigned int id) : id(id) {
+Ticket::Ticket(int id) : id(id) {
     this->pret = 0;
     this->ziua = "Luni";
 }
 
-Ticket::Ticket(unsigned int id, const string &ziua, const string &cod, double pret) : id(id), ziua(ziua), cod(cod),
+Ticket::Ticket(int id, const string &ziua, const string &cod, double pret) : id(id), ziua(ziua), cod(cod),
                                                                                     pret(pret) {}
 
 Ticket::Ticket(const string& line) {
@@ -28,7 +28,7 @@ Ticket::Ticket(const string& line) {
     this->ziua = aux[3];
 }
 
-unsigned int Ticket::getId() const {
+int Ticket::getId() const {
     return id;
 }
 
@@ -71,6 +71,7 @@ ostream &operator<<(ostream &os, const Ticket &ticket) {
 
 
 Ticket &Ticket::operator=(const Ticket &rhs) {
+    this->id = rhs.id;
     this->pret = rhs.pret;
     this->cod = rhs.cod;
     this->ziua = rhs.ziua;

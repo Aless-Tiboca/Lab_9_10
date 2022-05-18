@@ -16,7 +16,8 @@ Banknote::Banknote(const string& line) {
         aux.push_back(word);
     }
     this->id = stoi(aux[1]);
-    this->noOccurrences = stod(aux[3]);
+    this->value = stod(aux[3]);
+    this->noOccurrences = stoi(aux[5]);
 }
 
 double Banknote::getValue() const {
@@ -27,15 +28,15 @@ void Banknote::setValue(double value) {
     Banknote::value = value;
 }
 
-unsigned int Banknote::getId() const {
+int Banknote::getId() const {
     return id;
 }
 
-unsigned int Banknote::getNoOccurrences() const {
+int Banknote::getNoOccurrences() const {
     return noOccurrences;
 }
 
-void Banknote::setNoOccurrences(unsigned int noOccurrences) {
+void Banknote::setNoOccurrences(int noOccurrences) {
     Banknote::noOccurrences = noOccurrences;
 }
 
@@ -50,11 +51,11 @@ bool Banknote::operator!=(const Banknote &rhs) const {
 }
 
 ostream &operator<<(ostream &os, const Banknote &banknote) {
-    os << " id: " << banknote.id << "value: " << banknote.value  << " noOccurrences: " << banknote.noOccurrences;
+    os << "id: " << banknote.id << " value: " << banknote.value  << " noOccurrences: " << banknote.noOccurrences <<endl;
     return os;
 }
 
-Banknote::Banknote(unsigned int id, double value, unsigned int noOccurrences) : value(value), id(id),
+Banknote::Banknote(int id, double value, int noOccurrences) : value(value), id(id),
                                                                                 noOccurrences(noOccurrences) {}
 
 Banknote &Banknote::operator=(const Banknote &banknote) {

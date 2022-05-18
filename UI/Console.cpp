@@ -4,6 +4,7 @@
 
 #include "Console.h"
 #include "../Domain/DoubleCompare.h"
+#include "../Domain/Exception.h"
 
 Console::Console(const TicketService &ticketService, const BanknoteService &banknoteService) : ticketService(
         ticketService), banknoteService(banknoteService) {}
@@ -20,7 +21,7 @@ void printTicketMenu(){
 void Console::runTicketMenu() {
     bool ok = true;
     char option;
-    while(ok) {
+    while(ok){
         printTicketMenu();
         cout<<"Introduceti optiunea: "<<endl;
         cin>>option;
@@ -57,18 +58,28 @@ void Console::addTickets() {
         string zi, cod;
         double pret;
         cout << "Dati ID-ul biletului:" << endl;
-        cin >> id;
+        if(!(cin >> id)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("ID-ul trebuie sa fie un numar intreg!");
+        }
         cout << "Dati ziua biletului:" << endl;
         cin >> zi;
         cout << "Dati codul biletului:" << endl;
         cin >> cod;
         cout << "Dati pretul biletului:" << endl;
-        cin >> pret;
+        if(!(cin >> pret)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("Pretul trebuie sa fie un numar intreg!");
+        }
+
         Ticket ticket(id, zi, cod, pret);
         ticketService.create(ticket);
     }
     catch(exception &e) {
         cout << e.what() << '\n';
+        return;
     }
 }
 
@@ -76,7 +87,11 @@ void Console::deleteTicket() {
     try{
         int id;
         cout << "Dati ID-ul biletului pe care doriti sa il stergeti:" << endl;
-        cin>>id;
+        if(!(cin >> id)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("ID-ul trebuie sa fie un numar intreg!");
+        }
         vector<Ticket> tickets = ticketService.deleteTicket(id);
         for(auto i :tickets){
             cout<<i;
@@ -93,13 +108,21 @@ void Console::modifyTickets() {
         string zi, cod;
         double pret;
         cout << "Dati ID-ul biletului pe care doriti sa il modoficati:" << endl;
-        cin >> id;
+        if(!(cin >> id)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("ID-ul trebuie sa fie un numar intreg!");
+        }
         cout << "Dati noua zi a biletului:" << endl;
         cin >> zi;
         cout << "Dati noul cod a biletului:" << endl;
         cin >> cod;
         cout << "Dati noul pret a biletului:" << endl;
-        cin >> pret;
+        if(!(cin >> pret)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("Pretul trebuie sa fie un numar intreg!");
+        }
         Ticket newTicket(id, zi, cod, pret);
         ticketService.update(id, newTicket);
     }
@@ -117,7 +140,7 @@ void Console::getAll() {
 
 void printBanknoteMenu(){
     cout<<"----------BANKNOTES------------"<<endl;
-    cout<<"1)Adauga bancnote"<<endl;
+    cout<<"1)Schimbati stocul bancnotelor"<<endl;
     cout<<"2)Afiseaza bancnotele"<<endl;
     cout<<"3)Modifica o bancnota"<<endl;
     cout<<"4)Sterge o bancnota"<<endl;
@@ -127,7 +150,7 @@ void printBanknoteMenu(){
 void Console::runBanknoteMenu() {
     bool ok = true;
     char option;
-    while(ok) {
+    while(ok){
         printBanknoteMenu();
         cout << "Introduceti optiunea: " << endl;
         cin >> option;
@@ -162,7 +185,11 @@ void Console::deleteBanknotes() {
     try {
         int id;
         cout<<"Dati ID-ul bancnotei pe care doriti sa o stergeti:"<<endl;
-        cin>>id;
+        if(!(cin >> id)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("ID-ul trebuie sa fie un numar intreg!");
+        }
         banknoteService.deleteBanknote(id);
     }
     catch(exception &e) {
@@ -175,11 +202,23 @@ void Console::updateBanknotes() {
         int id, nrOcc;
         double value;
         cout<<"Dati ID-ul bancnotei pe care doriti sa o modificati:"<<endl;
-        cin>>id;
+        if(!(cin >> id)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("ID-ul trebuie sa fie un numar intreg!");
+        }
         cout<<"Dati valoarea bancnotei:"<<endl;
-        cin>>value;
+        if(!(cin >> value)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("Valoarea trebuie sa fie un numar real!");
+        }
         cout<<"Dati numarul aparitilor bancnotei:"<<endl;
-        cin>>nrOcc;
+        if(!(cin >> nrOcc)){
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("ID-ul trebuie sa fie un numar intreg!");
+        }
         banknoteService.update(id, Banknote(id, value, nrOcc));
     }
     catch (exception &e) {
@@ -189,15 +228,19 @@ void Console::updateBanknotes() {
 
 void Console::addBanknotes() {
     try {
-        int id, nrOcc;
-        double value;
-        cout<<"Dati ID-ul bancnotei:"<<endl;
-        cin>>id;
-        cout<<"Dati valoarea bancnotei:"<<endl;
-        cin>>value;
-        cout<<"Dati numarul aparitilor bancnotei:"<<endl;
-        cin>>nrOcc;
-        banknoteService.create(Banknote(id, value, nrOcc));
+        vector<double> vecOfNums = { 0.01, 0.05, 0.10, 0.5, 1, 5, 10, 50, 100, 200, 500 };
+        int nrOcc;
+
+        for(int i=0; i<vecOfNums.size(); i++) {
+            cout<<vecOfNums[i]<<" RON"<<endl;
+            cout << "Dati numarul aparitilor bancnotei:" << endl;
+            if (!(cin >> nrOcc)) {
+                cin.clear();
+                cin.ignore(1024, '\n');
+                throw Exception("ID-ul trebuie sa fie un numar intreg!");
+            }
+            banknoteService.update(11-i, Banknote(11-i, vecOfNums[i], nrOcc));
+        }
     }
     catch(exception &e) {
         cout << e.what() << '\n';
@@ -284,7 +327,10 @@ void Console::sumOfTicketFromADay() {
     string day;
     cout<<"Introduceti ziua pentru care doriti sa calculati totalul:"<<endl;
     cin>>day;
-    cout << "Totalul pentru " << day << " este: " << ticketService.getSumOfTicketsFromADay(day) << endl;
+    if(ticketService.getSumOfTicketsFromADay(day) != 0)
+        cout << "Totalul pentru " << day << " este: " << ticketService.getSumOfTicketsFromADay(day) << endl;
+    else
+        cout<<"Nu exista un total pentru ziua introdusa."<<endl;
 }
 
 void printClientMenu() {
@@ -307,21 +353,7 @@ void Console::runClient() {
                 break;
             }
             case '2': {
-                unsigned int id;
-                cout << "Dati ID-ul biletului pe care doriti sa il cumparati: ";
-                cin >> id;
-                int index = 0;
-                double inserted = 0;
-                double credit;
-                for(int i = 0;i < ticketService.getAll().size(); i++){
-                    if(ticketService.getAll()[i].getId() == id) {
-                        index = id;
-                        i =  ticketService.getAll().size();
-                    }
-                }
-                vector<Banknote> copy = banknoteService.getAll();
-                insertMoney(inserted, credit, ticketService.getAll()[index]);
-                pickUpChange(inserted, ticketService.getAll()[index], copy);
+                change();
                 break;
             }
             case 'x':{
@@ -334,29 +366,55 @@ void Console::runClient() {
     }
 }
 
+void Console::change() {
+    try{
+        unsigned int id;
+        cout << "Dati ID-ul biletului pe care doriti sa il cumparati: "<<endl;
+        if (!(cin >> id)) {
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("ID-ul trebuie sa fie un numar intreg!");
+        }
+        Ticket ticket = ticketService.getById(id);
+        cout<<ticket;
+        double inserted = 0;
+        double credit;
+        vector<Banknote> copy = banknoteService.getAll();
+        insertMoney(inserted, credit, ticket);
+        pickUpChange(inserted, ticket, copy);
+    }
+    catch(exception& e){
+        cout<<e.what()<<endl;
+    }
+}
+
 void Console::insertMoney(double &inserted, double credit, Ticket &ticket) {
     while(DoubleCompare::less(inserted, ticket.getPret())) {
-        cout << "Inserati credit (0.01/0.05/0.1/0.5/1/5/10/50/100/200/500):";
-        cin >> credit;
-
-        if(DoubleCompare::equal(credit, 0.01) ||
-           DoubleCompare::equal(credit, 0.05) ||
-           DoubleCompare::equal(credit, 0.1) ||
-           DoubleCompare::equal(credit, 0.5) ||
-           DoubleCompare::equal(credit, 1) ||
-           DoubleCompare::equal(credit, 5) ||
-           DoubleCompare::equal(credit, 10) ||
-           DoubleCompare::equal(credit, 50) ||
-           DoubleCompare::equal(credit, 100) ||
-           DoubleCompare::equal(credit, 200) ||
-           DoubleCompare::equal(credit, 500)) {
-            Banknote banknote = banknoteService.getBanknoteByValue(credit);
-            banknote.setNoOccurrences(banknote.getNoOccurrences() + 1);
-            banknoteService.update(banknote.getId(), banknote);
-            inserted += credit;
+        cout << "Inserati credit (0.01/0.05/0.1/0.5/1/5/10/50/100/200/500):"<<endl;
+        if(cin >> credit) {
+            if (DoubleCompare::equal(credit, 0.01) ||
+                DoubleCompare::equal(credit, 0.05) ||
+                DoubleCompare::equal(credit, 0.1) ||
+                DoubleCompare::equal(credit, 0.5) ||
+                DoubleCompare::equal(credit, 1) ||
+                DoubleCompare::equal(credit, 5) ||
+                DoubleCompare::equal(credit, 10) ||
+                DoubleCompare::equal(credit, 50) ||
+                DoubleCompare::equal(credit, 100) ||
+                DoubleCompare::equal(credit, 200) ||
+                DoubleCompare::equal(credit, 500)) {
+                Banknote banknote = banknoteService.getBanknoteByValue(credit);
+                banknote.setNoOccurrences(banknote.getNoOccurrences() + 1);
+                banknoteService.update(banknote.getId(), banknote);
+                inserted += credit;
+            } else {
+                cout << "Nu se accepta tipul de bancnota!" << '\n';
+            }
         }
-        else {
-            cout << "Nu se accepta tipul de bancnota!" << '\n';
+        else{
+            cin.clear();
+            cin.ignore(1024, '\n');
+            throw Exception("Creditul trebuie sa fie un numar real!");
         }
     }
 }
@@ -373,8 +431,9 @@ void Console::pickUpChange(double &inserted, Ticket &ticket, vector<Banknote> co
         }
         if (checker == 0) {
             banknoteService.updateAll(copy);
-            cout<< "Nu se poate oferi rest!"<<endl;
-        } else {
+            cout<< "Nu se poate oferi rest! Poti ridica banii!"<<endl;
+        }
+        else {
             double change = 0;
             for (int i = 0; i < result.size(); i++) {
                 change += result[i].getValue() *
@@ -386,7 +445,7 @@ void Console::pickUpChange(double &inserted, Ticket &ticket, vector<Banknote> co
                 cout << "Poti ridica restul: " <<endl;
                 for(auto& item: result){
                     if(item.getNoOccurrences() != 0){
-                        cout<<item.getNoOccurrences() << "bancnote de "<<item.getValue()<<" RON"<<endl;
+                        cout<<item.getNoOccurrences() << " bancnote de "<<item.getValue()<<" RON"<<endl;
                     }
                 }
                 cout << "Total: " << change << " RON." <<endl;

@@ -25,6 +25,9 @@ void BanknoteService::create(Banknote entity) {
 }
 
 vector<Banknote> BanknoteService::getAll() {
+    if(repository.getAll().size() == 0) {
+        throw Exception("Nu exista bancnote disponibile!.");
+    }
     return repository.getAll();
 }
 
@@ -64,11 +67,31 @@ vector<Banknote> BanknoteService::change(double productPrice, double insertedAmo
     changeVector.push_back(Banknote(10, 0.05, 0));
     changeVector.push_back(Banknote(11, 0.01, 0));
 
-    for(int i = 0; i < repository.getAll().size(); i++) {
-        while(DoubleCompare::greaterOrEqual(changeValue, repository.getAll()[i].getValue()) && repository.getAll()[i].getNoOccurrences()> 0) {
-            changeValue -= repository.getAll()[i].getValue();
-            repository.getAll()[i].setNoOccurrences(repository.getAll()[i].getNoOccurrences() - 1);
-            changeVector[i].setNoOccurrences(changeVector[i].getNoOccurrences() + 1);
+    if(repository.getAll().size() != 11 ||
+       (repository.getAll()[0].getNoOccurrences() == 0 &&
+        repository.getAll()[1].getNoOccurrences() == 0 &&
+        repository.getAll()[2].getNoOccurrences() == 0 &&
+        repository.getAll()[3].getNoOccurrences() == 0 &&
+        repository.getAll()[4].getNoOccurrences() == 0 &&
+        repository.getAll()[5].getNoOccurrences() == 0 &&
+        repository.getAll()[6].getNoOccurrences() == 0 &&
+        repository.getAll()[7].getNoOccurrences() == 0 &&
+        repository.getAll()[8].getNoOccurrences() == 0 &&
+        repository.getAll()[9].getNoOccurrences() == 0 &&
+        repository.getAll()[10].getNoOccurrences() == 0)) {
+        return changeVector;
+    }
+    else {
+        for (int i = 0; i < 11; i++) {
+            while (DoubleCompare::greaterOrEqual(changeValue, repository.getAll()[i].getValue()) &&
+                   repository.getAll()[i].getNoOccurrences() > 0) {
+                changeValue -= repository.getAll()[i].getValue();
+                Banknote updatedBanknote(repository.getAll()[i].getId(), repository.getAll()[i].getValue(), repository.getAll()[i].getNoOccurrences() - 1);
+                repository.update(repository.getAll()[i].getId(), updatedBanknote);
+
+                Banknote newBanknote(changeVector[i].getId(), changeVector[i].getValue(), changeVector[i].getNoOccurrences() + 1);
+                changeVector[i] = newBanknote;
+            }
         }
     }
 

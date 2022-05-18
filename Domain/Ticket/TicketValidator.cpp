@@ -16,7 +16,7 @@ void TicketValidator::validate(Ticket ticket) {
     else if(ticket.getZiua().size() == 0) {
         throw Exception("Ziua trebuie sa fie diferita de NULL!");
     }
-    else if(std::find(std::begin(week), std::end(week), ticket.getZiua()) != std::end(week)){
+    else if(!(std::find(std::begin(week), std::end(week), ticket.getZiua()) != std::end(week))){
         throw Exception("Ziua trebuie sa fie dintre zilele saptamanii!");
     }
     else if(ticket.getCod().size() == 0) {

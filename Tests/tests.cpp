@@ -8,12 +8,15 @@
 #include "../Service/TicketService.h"
 #include "../Repository/RepoInFile.h"
 #include "../Repository/RepoInMemory.h"
+#include "../Service/BanknoteService.h"
+#include "../Domain/Banknote/Banknote.h"
 
 void testAll() {
     testTicket();
     testRepoInMemory();
     testRepoInFile();
     testTicketService();
+//    testBanknoteService();
 }
 
 void testTicket() {
@@ -128,6 +131,7 @@ void testRepoInMemoryDelete() {
     repository.deleteEntity(2);
     repository.deleteEntity(4);
     repository.deleteEntity(5);
+
     assert(repository.getAll().size() == 2);
 }
 
@@ -291,8 +295,8 @@ void testTicketServiceDelete() {
     ser.create(p4);
     ser.create(p5);
 
+    ser.deleteTicket(1);
     ser.deleteTicket(2);
-    ser.deleteTicket(4);
     ser.deleteTicket(5);
     assert(ser.getAll().size() == 2);
 }
@@ -319,5 +323,122 @@ void testTicketServiceUpdate() {
     assert(ser.getAll()[0].getId() == 1);
     assert(ser.getAll()[0].getPret() == 10);
     assert(ser.getAll()[0].getZiua() == "Marti");
+}
+
+void testBanknoteService() {
+    testBanknoteService();
+    testBanknoteServiceAdd();
+    testBanknoteServiceUpdate();
+    testBanknoteServiceDelete();
+}
+
+void testBanknoteServiceAdd() {
+    RepoInMemory<Banknote> repoInMemory;
+    BanknoteService ser(repoInMemory);
+
+    Banknote b1(1, 1, 12);
+    Banknote b2(2, 0.5, 12);
+    Banknote b3(3, 0.1, 12);
+    Banknote b4(4, 10, 12);
+    Banknote b5(5, 5, 12);
+
+    ser.create(b1);
+    ser.create(b2);
+    ser.create(b3);
+    ser.create(b4);
+    ser.create(b5);
+
+    assert(ser.getAll().size() == 5);
+}
+
+void testBanknoteServiceUpdate() {
+    RepoInMemory<Banknote> repoInMemory;
+    BanknoteService ser(repoInMemory);
+
+    Banknote b1(1, 1, 12);
+    Banknote b2(2, 0.5, 4);
+    Banknote b3(3, 0.1, 1);
+    Banknote b4(4, 10, 1);
+    Banknote b5(5, 5, 11);
+
+    ser.create(b1);
+    ser.create(b2);
+    ser.create(b3);
+    ser.create(b4);
+    ser.create(b5);
+
+    ser.update(1, Banknote(1, 50, 10));
+
+    assert(ser.getAll()[0].getId() == 1);
+    assert(ser.getAll()[0].getValue() == 50);
+    assert(ser.getAll()[0].getNoOccurrences() == 10);
+}
+
+void testBanknoteServiceDelete() {
+    RepoInMemory<Banknote> repoInMemory;
+    BanknoteService ser(repoInMemory);
+
+    Banknote b1(1, 500, 10);
+    Banknote b2(2, 200, 10);
+    Banknote b3(3, 100, 10);
+    Banknote b4(4, 50, 10);
+    Banknote b5(5, 10, 10);
+    Banknote b6(6, 5, 12);
+    Banknote b7(7, 1, 1);
+    Banknote b8(8, 0.5, 9);
+    Banknote b9(9, 0.1, 7);
+    Banknote b10(10, 0.05, 10);
+    Banknote b11(11, 0.01, 10);
+
+    ser.create(b1);
+    ser.create(b2);
+    ser.create(b3);
+    ser.create(b4);
+    ser.create(b5);
+    ser.create(b6);
+    ser.create(b7);
+    ser.create(b8);
+    ser.create(b9);
+    ser.create(b10);
+    ser.create(b11);
+
+    ser.deleteBanknote(1);
+    ser.deleteBanknote(2);
+    assert(ser.getAll().size() == 9);
+}
+
+void testBanknoteServiceChange() {
+    RepoInMemory<Banknote> repoInMemory;
+    BanknoteService ser(repoInMemory);
+
+    Banknote b1(1, 500, 10);
+    Banknote b2(2, 200, 10);
+    Banknote b3(3, 100, 10);
+    Banknote b4(4, 50, 10);
+    Banknote b5(5, 10, 10);
+    Banknote b6(6, 5, 12);
+    Banknote b7(7, 1, 1);
+    Banknote b8(8, 0.5, 9);
+    Banknote b9(9, 0.1, 7);
+    Banknote b10(10, 0.05, 10);
+    Banknote b11(11, 0.01, 10);
+
+    ser.create(b1);
+    ser.create(b2);
+    ser.create(b3);
+    ser.create(b4);
+    ser.create(b5);
+    ser.create(b6);
+    ser.create(b7);
+    ser.create(b8);
+    ser.create(b9);
+    ser.create(b10);
+    ser.create(b11);
+
+    ser.change(565, 565);
+    assert(ser.getAll()[0].getNoOccurrences() == 9);
+    assert(ser.getAll()[3].getNoOccurrences() == 9);
+    assert(ser.getAll()[4].getNoOccurrences() == 9);
+    assert(ser.getAll()[5].getNoOccurrences() == 11);
 }
 

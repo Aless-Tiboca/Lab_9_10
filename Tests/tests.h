@@ -24,5 +24,10 @@ void testTicketServiceAdd();
 void testTicketServiceUpdate();
 void testTicketServiceDelete();
 void testTicketServiceSumFromADay();
+void testBanknoteService();
+void testBanknoteServiceAdd();
+void testBanknoteServiceUpdate();
+void testBanknoteServiceDelete();
+void testBanknoteServiceChange();
 
 #endif //LAB_9_10_TESTS_H

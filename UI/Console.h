@@ -47,6 +47,8 @@ public:
     void updateBanknotes();
 
     void deleteBanknotes();
+
+    void change();
 };
 
 

@@ -16,11 +16,11 @@ using namespace std;
 class Banknote {
 private:
     double value;
-    unsigned int id, noOccurrences;
+    int id, noOccurrences;
 public:
     Banknote();
 
-    Banknote(unsigned int id, double value, unsigned int noOccurrences);
+    Banknote(int id, double value, int noOccurrences);
 
     Banknote(const string& line);
 
@@ -30,11 +30,11 @@ public:
 
     void setValue(double value);
 
-    unsigned int getId() const;
+    int getId() const;
 
-    unsigned int getNoOccurrences() const;
+    int getNoOccurrences() const;
 
-    void setNoOccurrences(unsigned int noOccurrences);
+    void setNoOccurrences(int noOccurrences);
 
     Banknote& operator=(const Banknote &banknote);
 

@@ -14,17 +14,15 @@ private:
     IRepo<Ticket>& repo;
     TicketValidator validator;
 
-    bool doesExist(unsigned int id);
-
 public:
     TicketService(IRepo<Ticket> &repo);
-
+    bool doesExist(int id);
     void create(Ticket ex);
-    void update(unsigned int id, Ticket newTicket);
+    void update(int id, Ticket newTicket);
     vector<Ticket> getAll();
-    vector<Ticket> deleteTicket(unsigned int id);
+    vector<Ticket> deleteTicket(int id);
     int getSumOfTicketsFromADay(string day);
-
+    Ticket getById(int id);
 };
 
 
